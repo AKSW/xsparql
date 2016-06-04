@@ -4,7 +4,7 @@
   <parent>
     <artifactId>parent</artifactId>
     <groupId>org.sourceforge.xsparql</groupId>
-    <version>20140722</version>
+    <version>20160422</version>
   </parent>
   <artifactId>xsparql-rewriter</artifactId>
 
@@ -45,6 +45,14 @@
       <groupId>junit</groupId> 
       <artifactId>junit</artifactId>
     </dependency>
+      <!-- http://mvnrepository.com/artifact/org.apache.jena/jena-core -->
+      <dependency>
+          <groupId>org.apache.jena</groupId>
+          <artifactId>jena-core</artifactId>
+          <version>2.11.1</version>
+      </dependency>
+
+
   </dependencies>
 
   <build>

@@ -16,9 +16,9 @@ import org.sourceforge.xsparql.xquery.saxon.arq.sparqlQueryExtArqFunction;
 import org.sourceforge.xsparql.xquery.saxon.arq.sparqlScopedDatasetExtArqFunction;
 
 public class StaticSparqlFunctionBinder implements SparqlFunctionBinder{
-	private static final StaticSparqlFunctionBinder INSTANCE = new StaticSparqlFunctionBinder();
+	private static final org.sourceforge.xsparql.sparql.StaticSparqlFunctionBinder INSTANCE = new org.sourceforge.xsparql.sparql.StaticSparqlFunctionBinder();
 	
-	public static StaticSparqlFunctionBinder getInstance(){
+	public static org.sourceforge.xsparql.sparql.StaticSparqlFunctionBinder getInstance(){
 		return INSTANCE;
 	}
 	

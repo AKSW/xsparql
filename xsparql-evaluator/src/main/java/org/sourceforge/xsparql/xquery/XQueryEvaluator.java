@@ -49,6 +49,7 @@ import java.util.Set;
 
 import javax.xml.transform.Source;
 
+import net.sf.saxon.s9api.Serializer;
 import org.sourceforge.xsparql.sparql.DatasetManager;
 import org.sourceforge.xsparql.sql.SQLQuery;
 
@@ -114,4 +115,7 @@ public interface XQueryEvaluator {
 
 	public void setDataset(Set<URL> defaultGraph, Set<URL> namedGraphs, DatasetManager manager);
 
+	public void setOutputProperty(Serializer.Property prop, String value);
+
+	public String getOutputProperty(Serializer.Property prop);
 }

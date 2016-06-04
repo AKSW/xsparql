@@ -39,8 +39,6 @@
 package org.sourceforge.xsparql.evaluator;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -54,9 +52,9 @@ import java.util.Set;
 
 import javax.xml.transform.Source;
 
+import net.sf.saxon.s9api.Serializer;
 import org.sourceforge.xsparql.rewriter.XSPARQLProcessor;
-import org.sourceforge.xsparql.sparql.DatasetManager;
-import org.sourceforge.xsparql.sparql.binder.StaticSparqlFunctionBinder;
+import org.sourceforge.xsparql.sparql.StaticSparqlFunctionBinder;
 import org.sourceforge.xsparql.sql.SQLQuery;
 import org.sourceforge.xsparql.xquery.XQueryEvaluator;
 
@@ -230,6 +228,7 @@ public final class XSPARQLEvaluator {
 		xqueryEval.setExternalVariables(externalVars);
 		xqueryEval.setSource(source);
 		xqueryEval.setOutputMethod(xsparqlProc.getOutputMethod());
+		//xqueryEval.setOutputProperty(Serializer.Property.UNDECLARE_PREFIXES, "yes");
 		xqueryEval.setDBconnection(sqlQuery);
 		xqueryEval.setDataset(defaultGraphs, namedGraphs, StaticSparqlFunctionBinder.getInstance().getDatasetManager());
 		xqueryEval.evaluate(query, out);

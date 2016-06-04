@@ -1,13 +1,10 @@
-package org.sourceforge.xsparql.sparql.binder;
+package org.sourceforge.xsparql.sparql;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 
-import org.sourceforge.xsparql.sparql.DatasetManager;
-import org.sourceforge.xsparql.sparql.SparqlFunctionBinder;
-import org.sourceforge.xsparql.sparql.UnexpectedParameterException;
 import org.sourceforge.xsparql.xquery.saxon.createScopedDatasetExtFunction;
 import org.sourceforge.xsparql.xquery.saxon.deleteScopedDatasetExtFunction;
 import org.sourceforge.xsparql.xquery.saxon.scopedDatasetPopResultsExtFunction;
@@ -21,7 +18,7 @@ public class StaticSparqlFunctionBinder implements SparqlFunctionBinder{
 		return INSTANCE;
 	}
 	
-	private StaticSparqlFunctionBinder(){}
+	public StaticSparqlFunctionBinder(){}
 	
 	public ExtensionFunctionDefinition getSparqlQueryExtFunctionDefinition(){
 		return new sparqlQueryExtFunction();

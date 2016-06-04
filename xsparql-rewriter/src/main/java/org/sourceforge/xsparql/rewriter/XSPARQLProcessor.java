@@ -47,11 +47,6 @@ import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
-import org.sourceforge.xsparql.rewriter.XQuerySerializer;
-import org.sourceforge.xsparql.rewriter.XSPARQL;
-import org.sourceforge.xsparql.rewriter.XSPARQLLexer;
-import org.sourceforge.xsparql.rewriter.XSPARQLRewriter;
-import org.sourceforge.xsparql.rewriter.XSPARQLSimplifier;
 import org.sourceforge.xsparql.sql.SQLQuery;
 
 
@@ -170,10 +165,6 @@ public class XSPARQLProcessor {
    */
   private static String dbPasswd = null;
 
-
-
-
-
   /**
    * XQuery engine to be used for evaluation/code production.
    */
@@ -210,6 +201,26 @@ public class XSPARQLProcessor {
 
   // Public processing methods
 
+
+    private StringReader insertOutputOption(Reader re) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader br = new BufferedReader(re);
+        String targetString = null;
+        boolean wasNs = false;
+        while ((targetString = br.readLine()) != null)   {
+            if(targetString.trim().startsWith("declare namespace"))
+                wasNs = true;
+            if(wasNs && targetString.trim() != "" && !targetString.trim().startsWith("declare namespace"))
+            {
+                sb.append("declare option saxon:output \"method=text\";\n\n");
+                wasNs = false;
+            }
+            sb.append(targetString + "\n");
+        }
+        re.close();
+        return new StringReader(sb.toString());
+    }
+
   /**
    * Process XSPARQL query given as an InputStream
    * 
@@ -219,44 +230,48 @@ public class XSPARQLProcessor {
    * @throws RecognitionException
    * @throws IOException
    */
-  public String process(final Reader is) throws RecognitionException,
-      IOException, Exception {
-    CommonTokenStream tokenStream = createTokenStream(is);
+  public String process(final Reader is) throws Exception {
 
-    if (this.numSyntaxErrors > 0) {
-      throw new Exception("Errors for Lexer. Translation aborted.");
-    }
+      //insert declare option saxon:output "method=text"; after name spaces to get valid turtle output
+    StringReader printed = insertOutputOption(is);
+
+    CommonTokenStream tokenStream = createTokenStream(printed);
+
+      //TODO very messy stuff right here, get syntax error description?
+//    if (this.numSyntaxErrors > 0) {
+//      throw new Exception("Errors for Lexer. Translation aborted.");
+//    }
 
     CommonTree tree = parse(tokenStream);
 
-    if (this.numSyntaxErrors > 0) {
-      throw new Exception("Errors for Parser. Translation aborted.");
-    }
+//    if (this.numSyntaxErrors > 0) {
+//      throw new Exception("Errors for Parser. Translation aborted.");
+//    }
 
     printAST(tree);
 
     tree = rewrite(tokenStream, tree);
 
-    if (this.numSyntaxErrors > 0) {
-      throw new Exception("Errors for Rewriter. Translation aborted.");
-    }
+//    if (this.numSyntaxErrors > 0) {
+//      throw new Exception("Errors for Rewriter. Translation aborted.");
+//    }
 
     printAST(tree);
 
     tree = simplify(tokenStream, tree);
 
-    if (this.numSyntaxErrors > 0) {
-      throw new Exception("Errors for Simplifier. Translation aborted.");
-    }
+//    if (this.numSyntaxErrors > 0) {
+//      throw new Exception("Errors for Simplifier. Translation aborted.");
+//    }
 
     printAST(tree);
 
     String xquery = serialize(tokenStream, tree);
 
-    if (this.numSyntaxErrors > 0) {
-
-      throw new Exception("Errors for Serializer. Translation aborted.");
-    }
+//    if (this.numSyntaxErrors > 0) {
+//
+//      throw new Exception("Errors for Serializer. Translation aborted.");
+//    }
 
     return xquery;
   }
@@ -480,6 +495,10 @@ public class XSPARQLProcessor {
 
   public String getOutputMethod() {
     return this.outputMethod;
+  }
+
+  public void setOutputMethod(String outMeth) {
+    this.outputMethod = outMeth;
   }
 
 

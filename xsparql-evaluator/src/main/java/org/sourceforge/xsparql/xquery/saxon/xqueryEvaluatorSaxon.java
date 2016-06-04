@@ -35,12 +35,11 @@
  * on behalf of Politecnico di Milano, Stefan Bischof on behalf of Vienna 
  * University of Technology,  Nuno Lopes on behalf of NUI Galway.
  *
- */ 
+ */
 package org.sourceforge.xsparql.xquery.saxon;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -69,18 +68,18 @@ import net.sf.saxon.s9api.XdmAtomicValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sourceforge.xsparql.sparql.DatasetManager;
-import org.sourceforge.xsparql.sparql.binder.StaticSparqlFunctionBinder;
+import org.sourceforge.xsparql.sparql.StaticSparqlFunctionBinder;
 import org.sourceforge.xsparql.sql.SQLQuery;
 import org.sourceforge.xsparql.xquery.XQueryEvaluator;
 
 /**
  * Evaluate an XQuery using the Saxon API
- * 
+ *
  * @author Nuno Lopes
  */
 public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 	private static final Logger logger = LoggerFactory.getLogger(xqueryEvaluatorSaxon.class);
-	
+
 	private Processor proc;
 
 	private XQueryCompiler xqueryComp;
@@ -95,9 +94,9 @@ public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 
 	private Set<URL> defaultGraph;
 	private Set<URL> namedGraphs;
-	
+
 	private DatasetManager datasetManager;
-	
+
 	public void setDBconnection(SQLQuery q) {
 		this.sqlQuery = q;
 
@@ -107,7 +106,7 @@ public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 		proc.registerExtensionFunction(new getRDBTableAttributesExtFunction(sqlQuery));
 
 	}
-	
+
 	@Override
 	public void setDataset(Set<URL> defaultGraph, Set<URL> namedGraphs, DatasetManager manager) {
 		this.defaultGraph = defaultGraph;
@@ -139,7 +138,7 @@ public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 
 	/**
 	 * Creates a new <code>XQueryEvaluatorSaxon</code> instance.
-	 * 
+	 *
 	 */
 	public xqueryEvaluatorSaxon(boolean licensedVersion) {
 
@@ -155,19 +154,19 @@ public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 			while(paths.hasMoreElements()){
 				sparqlFunctionBinderPaths.add(paths.nextElement());
 			}
-	    } catch (IOException e) {
-	    	logger.error("Error while loading the class loader");
-	    }
-		if(sparqlFunctionBinderPaths.size()>1){
+		} catch (IOException e) {
+			logger.error("Error while loading the class loader");
+		}
+/*		if(sparqlFunctionBinderPaths.size()>1){
 			logger.error("There are too many SPARQL Evaluators!");
 			throw new RuntimeException("Too many SPARQL evals");
 		}
 		else{
 			logger.debug("There is {} SPARQL Evaluator!", sparqlFunctionBinderPaths.size());
-		}
-				
+		}*/
+
 		StaticSparqlFunctionBinder fd = StaticSparqlFunctionBinder.getInstance();
-		
+
 		proc.registerExtensionFunction(fd.getSparqlQueryExtFunctionDefinition());
 		proc.registerExtensionFunction(fd.getCreateScopedDatasetExtFunctionDefinition());
 		proc.registerExtensionFunction(fd.getSparqlScopedDatasetExtFunctionDefinition());
@@ -180,10 +179,10 @@ public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 		initializeSerializer();
 
 	}
-	
+
 	/**
 	 * returns the XQuery processor used in the class
-	 * 
+	 *
 	 */
 	public Processor getProcessor() {
 		return proc;
@@ -198,7 +197,7 @@ public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 
 	/**
 	 * Evaluate the XQuery query using the s9api of Saxon
-	 * 
+	 *
 	 * @param query
 	 */
 	public String evaluate(final String query) throws Exception {
@@ -210,7 +209,7 @@ public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 
 	/**
 	 * Evaluate the XQuery query using the s9api of Saxon
-	 * 
+	 *
 	 * @param query
 	 * @param out
 	 *          output
@@ -218,7 +217,7 @@ public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 	 *          list of external variables
 	 */
 	public void evaluate(final String query, OutputStream out,
-			Map<String, String> vars) throws Exception {
+						 Map<String, String> vars) throws Exception {
 
 		if (vars != null) {
 			xqueryExternalVars = vars;
@@ -230,7 +229,7 @@ public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.deri.xquery.XQueryEvaluator#setOmitXMLDecl(boolean)
 	 */
 	public void setOmitXMLDecl(boolean xmloutput) {
@@ -240,15 +239,25 @@ public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.deri.xquery.XQueryEvaluator#applyOutputProperty()
 	 */
 	public void setOutputMethod(String outputMethod) {
 		serializer.setOutputProperty(Serializer.Property.METHOD, outputMethod);
 	}
 
+	public void setOutputProperty(Serializer.Property prop, String value)
+	{
+		serializer.setOutputProperty(prop, value);
+	}
+
+	public String getOutputProperty(Serializer.Property prop)
+	{
+		return serializer.getOutputProperty(prop);
+	}
+
 	/**
-	 * 
+	 *
 	 */
 	private void initializeSerializer() {
 		serializer = new Serializer();
@@ -272,25 +281,21 @@ public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 		// http://sourceforge.net/tracker/?func=detail&aid=3008672&group_id=29872&atid=397617
 		xqueryComp = proc.newXQueryCompiler();
 
-		net.sf.saxon.s9api.XQueryEvaluator evaluator = xqueryComp.compile(query)
-				.load();
+		net.sf.saxon.s9api.XQueryEvaluator evaluator = xqueryComp.compile(query).load();
 
-		//TODO: reset at every evaluation (it should be optimizable) 
-		datasetManager.clean();
-		datasetManager.setDataset(defaultGraph, namedGraphs);
-		
+		//TODO: reset at every evaluation (it should be optimizable)
+		//datasetManager.clean();
+		//datasetManager.setDataset(defaultGraph, namedGraphs);
+
 		if (source != null)
 			evaluator.setSource(source);
-		
+
 		for (String name : xqueryExternalVars.keySet()) {
-			evaluator.setExternalVariable(new QName(name), new XdmAtomicValue(
-					xqueryExternalVars.get(name)));
+			evaluator.setExternalVariable(new QName(name), new XdmAtomicValue(xqueryExternalVars.get(name)));
 		}
 
 		try {
-
 			evaluator.run(serializer);
-
 		} catch (SaxonApiException e) {
 			throw new Exception(e.getMessage());
 		}

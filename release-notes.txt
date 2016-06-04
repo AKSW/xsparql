@@ -58,7 +58,8 @@ it will output:
 
 :alice  foaf:knows  &lt;http://www.example.org/bob&gt; .
        
-W workaround to get the right output is to explicitly add the a clause defining the output method as text. Note that this declaration has to be added after the prefixes:
+W workaround to get the right output is to explicitly add the a clause defining the output method as text.
+Note that this declaration has to be added after the prefixes:
 
 prefix foaf: <http://xmlns.com/foaf/0.1/>
 prefix : <http://www.example.org/>

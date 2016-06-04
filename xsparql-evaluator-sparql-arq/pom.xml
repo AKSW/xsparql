@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>parent</artifactId>
 		<groupId>org.sourceforge.xsparql</groupId>
-		<version>20140722</version>
+		<version>20160422</version>
 	</parent>
 
 	<artifactId>xsparql-evaluator-sparql-arq</artifactId>

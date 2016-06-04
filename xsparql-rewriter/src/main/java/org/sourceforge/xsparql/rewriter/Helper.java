@@ -38,15 +38,13 @@
  */ 
 package org.sourceforge.xsparql.rewriter;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.io.StringReader;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.DOTTreeGenerator;
 import org.antlr.runtime.tree.Tree;
@@ -101,11 +99,32 @@ public class Helper {
    * @param out the output stream
    * @throws IOException
    */
-  public static void outputString(final String str, final OutputStream out)
-      throws IOException {
-    final Writer bw = new BufferedWriter(new OutputStreamWriter(out));
-    bw.write(str);
+  public static void outputString(final String str, final OutputStream out, final boolean printPrefixes) throws IOException {
+    final Writer bw = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("UTF-8")));
+    Scanner scanner = new Scanner(str);
+    while (scanner.hasNextLine()) {
+      String line = scanner.nextLine();
+      if(!printPrefixes) {
+        if (!line.trim().toLowerCase().startsWith("@prefix"))
+          bw.write(line + "\n");
+      }
+      else
+        bw.write(line + "\n");
+    }
+    scanner.close();
     bw.close();
+  }
+
+  public static void printXsparqlAsRdf(final String result, final OutputStream os, final String rdfformat) throws FileNotFoundException {
+    Model model = ModelFactory.createDefaultModel();
+    try {
+      model.read(new ByteArrayInputStream(result.getBytes()), null, "TURTLE");
+      model.write(os, rdfformat);
+      model.close();
+    } catch(Exception e)
+    {
+      e.printStackTrace();
+    }
   }
 
   /**

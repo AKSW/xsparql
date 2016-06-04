@@ -181,7 +181,7 @@ declare function _xsparql:_binding_term($prefix as xs:string,
   if(fn:empty($Node)) then "" else
     let $label := if(fn:compare($prefix, "")=0)   (: change to if($prefix) :)
       then $Node
-      else fn:concat($prefix, data($Node))
+      else fn:concat(fn:namespace-uri-for-prefix($prefix, $Node), data($Node))
     return
       typeswitch ($label)
         case $e as xs:integer
@@ -192,7 +192,8 @@ declare function _xsparql:_binding_term($prefix as xs:string,
           return if (fn:matches(xs:string($label), "^_:[a-z]([a-z|0-9|_])*$", "i")) 
             then _xsparql:_binding("_sparql_result:bnode",  fn:substring($label,3), "", "")
             (: attempt to detect if it is a prefixed URI. :)
-            (:else if (fn:matches(xs:string($Node), "^([a-zA-Z]*):([a-zA-Z0-9_\-\.@]+)$")) :)
+            (: else if (fn:matches(xs:string($Node), "^([a-zA-Z]*):([a-zA-Z0-9_\-\.@]+)$")) :)
+            (: then _xsparql:_binding("_sparql_result:uri",  $label, "", "") :)
             else if (fn:starts-with(xs:string($Node), "https://") or fn:starts-with(xs:string($Node), "http://") or fn:starts-with(xs:string($Node), "mailto:") or fn:starts-with(xs:string($Node), "file:")) 
             then _xsparql:_binding("_sparql_result:uri",  $label, "", "")
             else _xsparql:_binding("_sparql_result:literal",  $label, $lang, $type)

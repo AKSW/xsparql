@@ -144,4 +144,3 @@ declare function sparql:dumpRow($values as node()*) {
   for $v in $values
   return $v
 };
-
