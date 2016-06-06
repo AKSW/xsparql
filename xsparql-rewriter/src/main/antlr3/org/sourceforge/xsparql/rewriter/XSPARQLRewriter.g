@@ -2007,7 +2007,9 @@ typeDeclaration
 
 sequenceType
   : EMPTYSEQUENCE LPAR RPAR
-  | itemType occurrenceIndicator?
+  | itemType
+  | itemType LPAR occurrenceIndicator RPAR
+  -> itemType occurrenceIndicator?
   ;
 
 occurrenceIndicator

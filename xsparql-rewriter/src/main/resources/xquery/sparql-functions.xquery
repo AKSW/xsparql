@@ -144,3 +144,8 @@ declare function sparql:dumpRow($values as node()*) {
   for $v in $values
   return $v
 };
+
+declare function sparql:namespaces-in-use  ( $root as node()? )  as xs:anyURI* {
+
+   distinct-values($root/descendant-or-self::*/(.|@*)/namespace-uri(.))
+ } ;

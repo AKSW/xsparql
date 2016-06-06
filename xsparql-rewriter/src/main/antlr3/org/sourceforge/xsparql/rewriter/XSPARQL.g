@@ -1216,7 +1216,7 @@ typeDeclaration
 sequenceType
 @init {trace();}
   : EMPTYSEQUENCE LPAR RPAR
-  | itemType occurrenceIndicator?;
+  | itemType (LPAR occurrenceIndicator RPAR)?;
 
 /* XQuery [120] */
 occurrenceIndicator

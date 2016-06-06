@@ -235,8 +235,8 @@ main
     -> schemaImport(mi1={$mi1.st}, mi2={$mi2.st}, mi3={$mi3.st})
   |  ^(T_FUNCTION_DECL fname1=main ^(T_PARAMS params+=main*) (^(AS as=main (op=QUESTIONMARK|op=STAR|op=PLUS)?))? definition=main?)
     -> funcDecl(name={$fname1.st}, params={$params}, as={$as.st}, op={$op.text}, definition={$definition.st})
-  |  ^(T_PARAM param=main ^(T_TYPE type=main? (op=QUESTIONMARK|op=STAR|op=PLUS)?))
-    -> param(name={$param.st}, type={$type.st}, op={$op.text})
+  |  ^(T_PARAM param=main ^(T_TYPE type=main? (pars=(LPAR RPAR))? (op=QUESTIONMARK|op=STAR|op=PLUS)?))
+    -> param(name={$param.st}, type={$type.st}, pars={$pars.text}, op={$op.text})
   |  ^(T_FUNCTION_CALL fname=main ^(T_PARAMS fexpr+=main*))
     -> funcCall(name={$fname.st}, expr={$fexpr})
   |  ^(T_UNOPTIMIZED_FUNCTION_CALL fname=main ^(T_PARAMS fexpr+=main*))
@@ -349,6 +349,8 @@ main
     -> {%{$COLONCOLON.text}}
   |  ELEMENT
     -> {%{$ELEMENT.text}}
+  |  NODE
+    -> {%{$NODE.text}}
   |  TEXT
     -> {%{$TEXT.text}}
   |  DOT

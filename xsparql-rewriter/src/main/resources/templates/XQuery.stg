@@ -106,11 +106,11 @@ return $return$
 >>
 
 funcDecl(name, params, as, op, definition) ::= <<
-declare function $name$ ($params; separator=", "$) $if(as)$ as $as$$if(op)$$op$$endif$$endif$ $if(definition)${$definition$}$else$ external $endif$;
+declare function $name$ ($params; separator=", "$) $if(as)$ as $as$$if(op)$$op$$endif$$endif$$if(definition)${$definition$}$else$ external $endif$;
 >>
 
-param(name, type, op) ::= <<
-$name$$if(type)$ as $type$$if(op)$$op$$endif$$endif$
+param(name, type, pars, op) ::= <<
+$name$$if(type)$ as $type$$if(pars)$$pars$$endif$$if(op)$$op$$endif$$endif$
 >>
 
 funcCall(name, expr) ::= <<

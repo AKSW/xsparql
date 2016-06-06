@@ -206,6 +206,13 @@ public class XSPARQLProcessor {
         StringBuilder sb = new StringBuilder();
         BufferedReader br = new BufferedReader(re);
         String targetString = null;
+
+
+      //TODO the following belongs to a work around replacing all occurrenceIndicators with '(occurrenceIndicator)' -> necessary since the mix from xquery and sparql brought some deeper problems with the parser prolog logic
+        String atomicTypeRegex = "(anyURI|boolean|byte|date|dateTime|decimal|dayTimeDuration|double|duration|float|gDay|gMonthDay|gMonth|gYear|gYearMonth|int|long|Name|QName|short|string|time|yearMonthDuration|anyAtomicType|untypedAtomic|integer|nonPositiveInteger|negativeInteger|nonNegativeInteger|unsignedLong|unsignedInt|unsignedShort|unsignedByte|positiveInteger|NOTATION|hexBinary|base64Binary|normalizedString|token|language|NMTOKEN|NCName|ID|IDREF|ENTITY|anyType|anySimpleType|untyped)\\s*(\\*|\\?|\\+)";
+        String nodeTypeRegex = "(\\w+\\(\\s*\\))\\s*(\\*|\\?|\\+)";
+
+
         boolean wasNs = false;
         while ((targetString = br.readLine()) != null)   {
             if(targetString.trim().startsWith("declare namespace"))
@@ -215,10 +222,15 @@ public class XSPARQLProcessor {
                 sb.append("declare option saxon:output \"method=text\";\n\n");
                 wasNs = false;
             }
+          //TODO workaround, see above
+            targetString = targetString.replaceAll(atomicTypeRegex, "$1\\($2\\)");
+            targetString = targetString.replaceAll(nodeTypeRegex, "$1\\($2\\)");
+
             sb.append(targetString + "\n");
         }
         re.close();
-        return new StringReader(sb.toString());
+        String str = sb.toString();
+        return new StringReader(str);
     }
 
   /**
@@ -258,13 +270,13 @@ public class XSPARQLProcessor {
 
     printAST(tree);
 
-    tree = simplify(tokenStream, tree);
+    //tree = simplify(tokenStream, tree);
 
 //    if (this.numSyntaxErrors > 0) {
 //      throw new Exception("Errors for Simplifier. Translation aborted.");
 //    }
 
-    printAST(tree);
+    //printAST(tree);
 
     String xquery = serialize(tokenStream, tree);
 
