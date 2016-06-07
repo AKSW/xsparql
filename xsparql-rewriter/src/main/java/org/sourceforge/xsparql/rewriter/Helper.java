@@ -132,15 +132,16 @@ public class Helper {
    * 
    * @param tree
    */
-  static void writeDotFile(final CommonTree tree, final String dotFile) {
+  static void writeDotFile(final CommonTree tree, final String dotFile, final String path) {
 
-    final String dotFilename = "tfd/" + dotFile.concat(".dot");
-    final String ouputFilename = "tfd/" + dotFile + "." + DOTFORMAT;
+    final String dotFilename = path + dotFile.concat(".dot");
+    final String ouputFilename = path + dotFile + "." + DOTFORMAT;
 
     logger.info("Creating DOT file " + dotFilename);
 
     final DOTTreeGenerator dtg = new DOTTreeGenerator();
     final StringTemplate st = dtg.toDOT(tree);
+
 
     // don't want gray background and blue text
     final String dotDesc = st
@@ -169,6 +170,7 @@ public class Helper {
     }
 
     // create the image out of the dot file
+    /* Windows
     final String cmd = "dot -T" + DOTFORMAT + " -o" + ouputFilename + " "
         + dotFilename;
     logger.info("Executing command: " + cmd);
@@ -179,6 +181,7 @@ public class Helper {
     }
 
     logger.info("Done: " + dotFile);
+    */
   }
 
   /**

@@ -281,7 +281,7 @@ public class Main {
         oparser.accepts("l", "Put Lexer in debug mode");
         oparser.acceptsAll(Arrays.asList("a", "ast"), "Print AST between rewriting steps");
         oparser.acceptsAll(Arrays.asList("d", "debug"), "Create debug version");
-        oparser.accepts("dot", "Save AST as PNG file (Graphviz needed)");
+        oparser.accepts("dotFiles", "Save dot and AST as PNG file (Graphviz needed) to this directory").withRequiredArg().ofType(String.class);
         oparser.accepts("u",
                 "SPARQL endpoint URI like \"http://localhost:2020/sparql?query=\"")
                 .withRequiredArg();
@@ -371,12 +371,17 @@ public class Main {
 
         // simple commandline switches
         proc.setVerbose(options.has("v"));
-        proc.setDot(options.has("dot"));
         proc.setDebug(options.has("p"));
         proc.setDebugLexer(options.has("l"));
         proc.setAst(options.has("a"));
         this.evaluate = !options.has("rewrite-only");
         proc.setDebugVersion(options.has("d"));
+
+        if(options.has("dotFiles"))
+        {
+            proc.setDot(true);
+            proc.setDotFiles(options.valueOf("dotFiles").toString());
+        }
 
         // Disabled this option, if somebody wants to use this we can re-enable it
 //    if (options.has("arq") && options.has("joseki")) {

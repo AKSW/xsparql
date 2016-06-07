@@ -114,6 +114,19 @@ public class XSPARQLProcessor {
    */
   private boolean dot = false;
 
+  public String getDotFiles() {
+    return dotFiles;
+  }
+
+  public void setDotFiles(String dotFiles) {
+    this.dotFiles = dotFiles;
+  }
+
+  /**
+   * Dot files will be stored here
+   */
+  private String dotFiles = "";
+
   /**
    * Parse in debug mode
    */
@@ -210,7 +223,7 @@ public class XSPARQLProcessor {
 
       //TODO the following belongs to a work around replacing all occurrenceIndicators with '(occurrenceIndicator)' -> necessary since the mix from xquery and sparql brought some deeper problems with the parser prolog logic
         String atomicTypeRegex = "(anyURI|boolean|byte|date|dateTime|decimal|dayTimeDuration|double|duration|float|gDay|gMonthDay|gMonth|gYear|gYearMonth|int|long|Name|QName|short|string|time|yearMonthDuration|anyAtomicType|untypedAtomic|integer|nonPositiveInteger|negativeInteger|nonNegativeInteger|unsignedLong|unsignedInt|unsignedShort|unsignedByte|positiveInteger|NOTATION|hexBinary|base64Binary|normalizedString|token|language|NMTOKEN|NCName|ID|IDREF|ENTITY|anyType|anySimpleType|untyped)\\s*(\\*|\\?|\\+)";
-        String nodeTypeRegex = "(\\w+\\(\\s*\\))\\s*(\\*|\\?|\\+)";
+        String nodeTypeRegex = "(\\w+\\s*\\(\\s*\\))\\s*(\\*|\\?|\\+)";
 
 
         boolean wasNs = false;
@@ -297,16 +310,20 @@ public class XSPARQLProcessor {
    * @param tree
    */
   private void printAST(CommonTree tree) {
+
+    String qu = tree.toStringTree();
     if (this.dot) {
       Helper.writeDotFile(
           tree,
           this.queryFilename.concat(".").concat(
-              Integer.toString(tempFileCounter)));
+              Integer.toString(tempFileCounter)),
+              this.getDotFiles());
       tempFileCounter++;
     }
     if (this.ast) {
       Helper.printTree(tree);
     }
+
   }
 
   /**

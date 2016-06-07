@@ -70,7 +70,7 @@ let $var$ := $expr$
 
 >>
 
-instanceOf(test, type) ::= <<
+instanceOf(test, type, pars) ::= <<
 $test$ instance of $type$
 >>
 
@@ -103,6 +103,10 @@ $p1$ $op$ $p2$
 
 returnClause(return) ::= <<
 return $return$
+>>
+
+emptyItem(item) ::= <<
+$item$()
 >>
 
 funcDecl(name, params, as, op, definition) ::= <<

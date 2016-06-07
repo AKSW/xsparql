@@ -1221,7 +1221,7 @@ sequenceType
 /* XQuery [120] */
 occurrenceIndicator
 @init {trace();}
-  : QUESTIONMARK// | PLUS | STAR
+  : QUESTIONMARK | PLUS | STAR
   ;
 
 /* XQuery [121] */

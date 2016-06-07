@@ -347,10 +347,24 @@ main
     -> {%{$COLON.text}}
   |  COLONCOLON
     -> {%{$COLONCOLON.text}}
+  |  (ELEMENT LPAR RPAR)
+    -> emptyItem(item={$ELEMENT.text})
   |  ELEMENT
     -> {%{$ELEMENT.text}}
+  |  (NODE LPAR RPAR)
+    -> emptyItem(item={$NODE.text})
   |  NODE
     -> {%{$NODE.text}}
+  |  (DOCUMENTNODE LPAR RPAR)
+    -> emptyItem(item={$DOCUMENTNODE.text})
+  |  DOCUMENTNODE
+    -> {%{$DOCUMENTNODE.text}}
+  |  (DOCUMENT LPAR RPAR)
+    -> emptyItem(item={$DOCUMENT.text})
+  |  DOCUMENT
+    -> {%{$DOCUMENT.text}}
+  |  (TEXT LPAR RPAR)
+    -> emptyItem(item={$TEXT.text})
   |  TEXT
     -> {%{$TEXT.text}}
   |  DOT
