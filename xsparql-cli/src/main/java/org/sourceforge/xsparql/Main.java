@@ -46,6 +46,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -84,6 +85,9 @@ public class Main {
     private String rdfformat = null;
     private boolean printPrefixes = true;
     private boolean appendOutput = false;
+
+
+    private final static Logger logger = Logger.getLogger(Helper.class.getClass().getName());
 
     /**
      * Main application entry point
@@ -236,7 +240,7 @@ public class Main {
                 }
                 catch(Exception sax)
                 {
-                    sax.printStackTrace();
+                    logger.warning("An XQuery exception ocurred for file, which will be skipped: " + f.getAbsolutePath() + "\nmessage: " + sax.getMessage());
                 }
 
                 // XQueryEvaluator eval = XSPARQLEvaluator.getEvaluator();

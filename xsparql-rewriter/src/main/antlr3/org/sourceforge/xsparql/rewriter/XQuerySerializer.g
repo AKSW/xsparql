@@ -337,6 +337,8 @@ main
     -> {%{$ISBLANK.text}}
   |  ISIRI
     -> {%{$ISIRI.text}}
+  |  (ITEM LPAR RPAR)
+    -> emptyItem(item={$ITEM.text})
   |  ITEM
     -> {%{$ITEM.text}}
   |  LANG

@@ -65,8 +65,7 @@ import org.apache.xerces.dom.DocumentImpl;
  * 
  */
 public class Helper {
-  private final static Logger logger = Logger.getLogger(Helper.class.getClass()
-      .getName());
+  private final static Logger logger = Logger.getLogger(Helper.class.getClass().getName());
 
   /**
    * Output format of Graphviz dot.

@@ -225,6 +225,7 @@ public class XSPARQLProcessor {
         String atomicTypeRegex = "(anyURI|boolean|byte|date|dateTime|decimal|dayTimeDuration|double|duration|float|gDay|gMonthDay|gMonth|gYear|gYearMonth|int|long|Name|QName|short|string|time|yearMonthDuration|anyAtomicType|untypedAtomic|integer|nonPositiveInteger|negativeInteger|nonNegativeInteger|unsignedLong|unsignedInt|unsignedShort|unsignedByte|positiveInteger|NOTATION|hexBinary|base64Binary|normalizedString|token|language|NMTOKEN|NCName|ID|IDREF|ENTITY|anyType|anySimpleType|untyped)\\s*(\\*|\\?|\\+)";
         String nodeTypeRegex = "(\\w+\\s*\\(\\s*\\))\\s*(\\*|\\?|\\+)";
 
+        String forLetRetun = "(?s)\\{[(\\s|\\n)]*(return|construct)";
 
         boolean wasNs = false;
         while ((targetString = br.readLine()) != null)   {
@@ -238,11 +239,12 @@ public class XSPARQLProcessor {
           //TODO workaround, see above
             targetString = targetString.replaceAll(atomicTypeRegex, "$1\\($2\\)");
             targetString = targetString.replaceAll(nodeTypeRegex, "$1\\($2\\)");
-
             sb.append(targetString + "\n");
         }
         re.close();
-        String str = sb.toString();
+
+      //TODO this will shortcut the ForLet statement in front of return or construct
+        String str = sb.toString().replaceAll(forLetRetun, "\\{ let \\$zwxyt-kz03YvwQxy1yz := 0 $1");
         return new StringReader(str);
     }
 

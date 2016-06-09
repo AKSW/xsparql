@@ -24,8 +24,7 @@ options {
 tokens {
 
   // Lexer tokens
-//  VAR;ENDELM;INTEGER;DECIMAL;LCURLY;RCURLY;NCNAME;QSTRING;DOT;AT;ASSIGN;CARET;CARETCARET;COLON;COMMA;SLASH; // including decimal produces an error
-  VAR;ENDELM;INTEGER;LCURLY;RCURLY;NCNAME;QSTRING;DOT;AT;ASSIGN;CARET;CARETCARET;COLON;COMMA;SLASH;
+  VAR;ENDELM;INTEGER;DECIMAL;LCURLY;RCURLY;NCNAME;QSTRING;DOT;AT;ASSIGN;CARET;CARETCARET;COLON;COMMA;SLASH;
   LBRACKET;RBRACKET;LPAR;RPAR;SEMICOLON;STAR;DOTDOT;SLASHSLASH;LESSTHAN;GREATERTHAN; PLUS;MINUS;
   UNIONSYMBOL;QUESTIONMARK;LESSTHANLESSTHAN;GREATERTHANEQUALS;LESSTHANEQUALS;HAFENEQUALS;EQUALS;
   COLONCOLON;  BLANK_NODE_LABEL;BNODE_CONSTRUCT;IRI_CONSTRUCT;ASK;DESCRIBE;SELECT;PNAME_NS;PNAME_LN;
@@ -473,7 +472,8 @@ queryBody
 /* XQuery [31] */
 expr
 @init {trace();}
-  : exprSingle (COMMA! exprSingle)*;
+  : exprSingle (COMMA! exprSingle)*
+  ;
 
 /* XQuery [32] */
 exprSingle
@@ -489,19 +489,20 @@ exprSingle
 /* XQuery [33] */
 flworExpr
 @init {trace();}
-  : forletClause (
+    : forletClause
+        (
             (
-                c=CONSTRUCT constructTemplate {sparqlnamespaces = true; graphoutput=true; this.setOutputMethod("text"); } 
-             |  r=RETURN exprSingle 
-		        )
-		        -> ^(T_FLWOR forletClause
-		                ^(T_CONSTRUCT[$c] constructTemplate)?
-		                ^(T_RETURN[$r] exprSingle)?
-		             )
-			      | flworExpr // introduce right associative simple flwor expressions
-			        -> ^(T_FLWOR forletClause ^(T_RETURN flworExpr))
-      )
-  ;
+                c=CONSTRUCT constructTemplate {sparqlnamespaces = true; graphoutput=true; this.setOutputMethod("text"); }
+             |  r=RETURN exprSingle
+                )
+                -> ^(T_FLWOR forletClause
+                        ^(T_CONSTRUCT[$c] constructTemplate)?
+                        ^(T_RETURN[$r] exprSingle)?
+                     )
+                  | flworExpr // introduce right associative simple flwor expressions
+                    -> ^(T_FLWOR forletClause ^(T_RETURN flworExpr))
+        )
+    ;
 
 // plug sparql for clause in
 forletClause
