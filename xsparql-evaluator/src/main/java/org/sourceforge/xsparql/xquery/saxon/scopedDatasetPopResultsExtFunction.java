@@ -112,8 +112,7 @@ public class scopedDatasetPopResultsExtFunction extends ExtensionFunctionDefinit
   public ExtensionFunctionCall makeCallExpression() {
 	  return new ExtensionFunctionCall() {
 		@Override
-		public SequenceIterator<? extends Item> call(
-				SequenceIterator<? extends Item>[] arg0, XPathContext arg1)
+		public SequenceIterator<? extends Item> call(SequenceIterator<? extends Item>[] arg0, XPathContext arg1)
 				throws XPathException {
 			  throw new UnsupportedOperationException("A proper binding should be supplied");
 		}

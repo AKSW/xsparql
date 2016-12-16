@@ -38,26 +38,19 @@
  */
 package org.sourceforge.xsparql;
 
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
-
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-
 import org.sourceforge.xsparql.evaluator.XSPARQLEvaluator;
 import org.sourceforge.xsparql.rewriter.Helper;
 import org.sourceforge.xsparql.rewriter.XSPARQLProcessor;
-import org.xml.sax.SAXParseException;
 
 import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
+import java.util.logging.Logger;
 
 
 /**
@@ -100,6 +93,10 @@ public class Main {
         Main main = new Main();
 
         main.parseOptions(args);
+
+
+        // delete
+        //Helper.printXsparqlAsRdf(new String(Files.readAllBytes(Paths.get(args[0])), Charset.forName("Utf-8")), new FileOutputStream(new File(args[1])), "RDF/XML");
 
         Reader is = null;
         if (main.queryFiles.length > 0) {
@@ -258,7 +255,12 @@ public class Main {
 
         if (rdfformat != null)
         {
-            Helper.printXsparqlAsRdf(resultCollector.toString(), new FileOutputStream(outputFile), rdfformat);
+            if (outputFile == null) {
+                Helper.printXsparqlAsRdf(resultCollector.toString(), System.out, rdfformat);
+            } else {
+                Helper.printXsparqlAsRdf(resultCollector.toString(), new FileOutputStream(outputFile), rdfformat);
+            }
+
         }
         else {
             if (outputFile == null) {

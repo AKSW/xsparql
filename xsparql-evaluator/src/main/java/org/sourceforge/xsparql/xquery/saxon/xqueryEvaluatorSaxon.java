@@ -147,6 +147,9 @@ public class xqueryEvaluatorSaxon implements XQueryEvaluator {
 		proc.registerExtensionFunction(new turtleGraphToURIExtFunction());
 		proc.registerExtensionFunction(new jsonDocExtFunction());
 
+		//re3data functions
+		proc.registerExtensionFunction(new curlQueryExtFunction());
+
 		Set<URL> sparqlFunctionBinderPaths = new LinkedHashSet<URL>();
 		try{
 			ClassLoader cl = xqueryEvaluatorSaxon.class.getClassLoader();

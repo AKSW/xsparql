@@ -53,6 +53,8 @@
     <extensionFunction>org.sourceforge.xsparql.xquery.saxon.deleteNamedGraphExtFunction</extensionFunction>
     <extensionFunction>org.sourceforge.xsparql.xquery.saxon.sparqlQueryTDBExtFunction</extensionFunction>
     <extensionFunction>org.sourceforge.xsparql.xquery.saxon.jsonDocExtFunction</extensionFunction>
+
+    <extensionFunction>org.sourceforge.xsparql.xquery.saxon.curlQueryExtFunction</extensionFunction>
   </resources>
 </configuration>
 

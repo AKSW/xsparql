@@ -47,19 +47,7 @@ import net.sf.saxon.Query;
 import net.sf.saxon.trans.CommandLineOptions;
 
 import org.sourceforge.xsparql.rewriter.XSPARQLProcessor;
-import org.sourceforge.xsparql.xquery.saxon.createNamedGraphExtFunction;
-import org.sourceforge.xsparql.xquery.saxon.createScopedDatasetExtFunction;
-import org.sourceforge.xsparql.xquery.saxon.deleteNamedGraphExtFunction;
-import org.sourceforge.xsparql.xquery.saxon.deleteScopedDatasetExtFunction;
-import org.sourceforge.xsparql.xquery.saxon.getRDBTableAttributesExtFunction;
-import org.sourceforge.xsparql.xquery.saxon.getRDBTablesExtFunction;
-import org.sourceforge.xsparql.xquery.saxon.jsonDocExtFunction;
-import org.sourceforge.xsparql.xquery.saxon.scopedDatasetPopResultsExtFunction;
-import org.sourceforge.xsparql.xquery.saxon.sparqlQueryExtFunction;
-import org.sourceforge.xsparql.xquery.saxon.sparqlQueryTDBExtFunction;
-import org.sourceforge.xsparql.xquery.saxon.sparqlScopedDatasetExtFunction;
-import org.sourceforge.xsparql.xquery.saxon.sqlQueryExtFunction;
-import org.sourceforge.xsparql.xquery.saxon.turtleGraphToURIExtFunction;
+import org.sourceforge.xsparql.xquery.saxon.*;
 
 /**
  * @author Nuno Lopes
@@ -105,6 +93,9 @@ public class XSQuery extends Query {
 	    config.registerExtensionFunction(new sqlQueryExtFunction());
 	    config.registerExtensionFunction(new getRDBTablesExtFunction());
 	    config.registerExtensionFunction(new getRDBTableAttributesExtFunction());
+
+		//re3data functions
+		config.registerExtensionFunction(new curlQueryExtFunction());
 
         } catch (Exception ex) {
             throw new IllegalArgumentException();

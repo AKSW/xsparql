@@ -38,24 +38,24 @@
  */ 
 package org.sourceforge.xsparql.rewriter;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.Scanner;
-import java.util.logging.Logger;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.DOTTreeGenerator;
 import org.antlr.runtime.tree.Tree;
 import org.antlr.stringtemplate.StringTemplate;
-
-import org.w3c.dom.*;
-import javax.xml.parsers.*;
-
+import org.apache.xerces.dom.DocumentImpl;
+import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.apache.xerces.dom.DocumentImpl;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
  * Class contains only some helper "functions" (static methods)
