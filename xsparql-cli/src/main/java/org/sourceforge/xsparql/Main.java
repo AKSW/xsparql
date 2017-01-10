@@ -76,6 +76,7 @@ public class Main {
     protected boolean dm = false;
 
     private String rdfformat = null;
+    private String[] modelTransformers = null;
     private boolean printPrefixes = true;
     private boolean appendOutput = false;
 
@@ -256,9 +257,9 @@ public class Main {
         if (rdfformat != null)
         {
             if (outputFile == null) {
-                Helper.printXsparqlAsRdf(resultCollector.toString(), System.out, rdfformat);
+                Helper.printXsparqlAsRdf(resultCollector.toString(), System.out, rdfformat, modelTransformers);
             } else {
-                Helper.printXsparqlAsRdf(resultCollector.toString(), new FileOutputStream(outputFile), rdfformat);
+                Helper.printXsparqlAsRdf(resultCollector.toString(), new FileOutputStream(outputFile), rdfformat, modelTransformers);
             }
 
         }
@@ -329,6 +330,7 @@ public class Main {
 
         //xsparql output
         oparser.accepts("rdfformat", "Specify the rdf output format").withRequiredArg().ofType(String.class);
+        oparser.accepts("modelTransformer", "Name possible Jena Model Transformer instances which shall be applied to the resulting model.").withRequiredArg().ofType(String.class);
 
         final OptionSpec<File> tdbDirOption = oparser
                 .accepts("tdbdir", "TDB directory").withRequiredArg()
@@ -417,6 +419,10 @@ public class Main {
 
         if (options.has("rdfformat")) {
             rdfformat = options.valueOf("rdfformat").toString();
+        }
+
+        if (options.has("modelTransformer")) {
+            modelTransformers = options.valueOf("modelTransformer").toString().split("\\s*,\\s*");
         }
 
         if (options.has("append")) {

@@ -45,6 +45,7 @@ import org.antlr.runtime.tree.DOTTreeGenerator;
 import org.antlr.runtime.tree.Tree;
 import org.antlr.stringtemplate.StringTemplate;
 import org.apache.xerces.dom.DocumentImpl;
+import org.sourceforge.xsparql.Jena.ModelTransformer;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -54,7 +55,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Function;
 import java.util.logging.Logger;
 
 /**
@@ -115,15 +118,30 @@ public class Helper {
   }
 
   public static void printXsparqlAsRdf(final String result, final OutputStream os, final String rdfformat) throws FileNotFoundException {
+    printXsparqlAsRdf(result, os, rdfformat, new String[0]);
+  }
+
+  public static void printXsparqlAsRdf(final String result, final OutputStream os, final String rdfformat, String[] transformers) throws FileNotFoundException {
+    if(transformers == null)
+      transformers = new String[0];
     Model model = ModelFactory.createDefaultModel();
     try {
       model.read(new ByteArrayInputStream(result.getBytes()), null, "TURTLE");
+      Map<String, String> prefixes = model.getNsPrefixMap();
+      for (String trans : transformers){
+        model = ModelTransformer.getTransformer(trans).apply(model);
+      }
+      model.setNsPrefixes(prefixes);
       model.write(os, rdfformat);
       model.close();
     } catch(Exception e)
     {
       e.printStackTrace();
     }
+  }
+
+  private static Model transformModel(Function<Model, Model> tranformer, Model m){
+    return tranformer.apply(m);
   }
 
   /**
